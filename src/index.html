@@ -2,18 +2,59 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Front End Web 100</title>
+  <meta charset="UTF-8">
+  <title>Front End Web 100</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
 </head>
 
 <body>
-    <header>
-        <h1>Front End Web 100 Starter</h1>
-        <h2>Progressive ITU</h2>
-    </header>
-    <main>
-        
-    </main>
+  <header>
+    <h1>Tip Calculator</h1>
+  </header>
+  <main>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text"
+              id="basic-addon1">$</span>
+      </div>
+      <input type="number"
+             class="form-control"
+             id="billInput">
+    </div>
+    <div class="btn-group"
+         role="group"
+         aria-label="Basic example">
+      <button type="button"
+              class="btn btn-secondary"
+              id="tenPercent"
+              value=10>10%</button>
+      <button type="button"
+              class="btn btn-secondary"
+              id="fifteenPercent"
+              value=15>15%</button>
+      <button type="button"
+              class="btn btn-secondary"
+              id="twentyPercent"
+              value=20>20%</button>
+    </div>
+    <span id="tipMessage">You are tipping 10% by default. Click the percentage buttons to change the tip
+      percentage.</span>
+
+    <ul class="list-group">
+      <li class="list-group-item"
+          id="listBillAmount">Bill Cost Before Tip: $0.00</li>
+      <li class="list-group-item"
+          id="listTipPercentage">Tip Percentage: 10% </li>
+      <li class="list-group-item"
+          id="listTipAmount">Amount of Tip: $0.00</li>
+      <li class="list-group-item"
+          id="listTotal">Cost of the Bill Including Tip: $0.00</li>
+    </ul>
+
+  </main>
 </body>
 
 </html>
