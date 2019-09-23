@@ -15,6 +15,7 @@ let tipPercent = .20;
 
 /* Checks local storage for a user-set default tip percentage. If found,
 disables the button for the prefered amount.*/
+/* #region tipDefault Setting From Local Storage */
 if (localStorage.getItem('tipDefault') === null) {
     tipPercent = .10;
     listTipPercentage.innerText = 'Tip Percentage: 10%';
@@ -40,7 +41,9 @@ if (localStorage.getItem('tipDefault') === null) {
     twentyPercent.disabled = true;
     listTipPercentage.innerText = 'Tip Percentage: 20%';
 }
+/* #endregion */
 
+// anon func to store user tip preference in LocalStorage
 tipPreference.addEventListener('click', () => {
     console.log('tip default is being called');
     if (tenPercent.disabled === true) {
@@ -52,11 +55,12 @@ tipPreference.addEventListener('click', () => {
     }
 });
 
-
+// func to call caluclate when a user changes the input in bill amount box
 billInput.addEventListener('keyup', function () {
     calculate();
 });
 
+// anon func to change tip percentage if user clicks button and calls calculate to update values accordingly
 tenPercent.addEventListener('click', () => {
     tipPercent = .10;
     calculate();
@@ -85,6 +89,7 @@ twentyPercent.addEventListener('click', () => {
     listTipPercentage.innerText = 'Tip Percentage: 20%';
 });
 
+// function that calculates tip amount, displays bill amount, and calculates grand total.
 function calculate() {
     if (billInput.valueAsNumber < 0) {
         billInput.classList.add('error');
@@ -103,6 +108,13 @@ function calculate() {
         billInput.classList.remove('error');
     }
 }
+
+
+
+
+
+
+
 
 
 
