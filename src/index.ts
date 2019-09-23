@@ -13,6 +13,8 @@ const tipMessage = document.getElementById('tipMessage');
 const tipPreference = document.getElementById('tipPreference');
 const customTipInput = document.getElementById('customTipInput') as HTMLInputElement;
 const customTipSpan = document.getElementById('customTipSpan');
+const splitInput = document.getElementById('splitInput') as HTMLInputElement;
+const totalSplitAmount = document.getElementById('totalSplitAmount');
 let tipPercent = .20;
 
 /* Checks local storage for a user-set default tip percentage. If found,
@@ -113,6 +115,10 @@ twentyPercent.addEventListener('click', () => {
     listTipPercentage.innerText = 'Tip Percentage: 20%';
 });
 
+splitInput.addEventListener('keyup', () => {
+    calculate();
+});
+
 // function that calculates tip amount, displays bill amount, and calculates grand total.
 function calculate() {
     if (billInput.valueAsNumber < 0) {
@@ -130,6 +136,11 @@ function calculate() {
         listBillAmount.innerText = `Bill Cost Before Tip: $${billInput.value}`;
         listTotal.innerText = `Cost of the Bill Including Tip: $${total}`;
         billInput.classList.remove('error');
+        if (splitInput.value !== '') {
+            const split = (parseInt(total) / splitInput.valueAsNumber).toFixed(2);
+            totalSplitAmount.hidden = false;
+            totalSplitAmount.innerText = `Each Person Owes: $${split}`;
+        }
     }
 }
 
