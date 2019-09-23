@@ -10,7 +10,48 @@ const listTipPercentage = document.getElementById('listTipPercentage');
 const listTipAmount = document.getElementById('listTipAmount');
 const listTotal = document.getElementById('listTotal');
 const tipMessage = document.getElementById('tipMessage');
-let tipPercent = .10;
+const tipPreference = document.getElementById('tipPreference');
+let tipPercent = .20;
+
+/* Checks local storage for a user-set default tip percentage. If found,
+disables the button for the prefered amount.*/
+if (localStorage.getItem('tipDefault') === null) {
+    tipPercent = .10;
+    listTipPercentage.innerText = 'Tip Percentage: 10%';
+} else if (localStorage.getItem('tipDefault') === '10') {
+    tipPercent = .10;
+    tipMessage.innerText = 'Tip Percentage set to 10% (your saved tip preference)';
+    tenPercent.disabled = true;
+    fifteenPercent.disabled = false;
+    twentyPercent.disabled = false;
+    listTipPercentage.innerText = 'Tip Percentage: 10%';
+} else if (localStorage.getItem('tipDefault') === '15') {
+    tipPercent = .15;
+    tipMessage.innerText = 'Tip Percentage set to 15% (your saved tip preference)';
+    tenPercent.disabled = false;
+    fifteenPercent.disabled = true;
+    twentyPercent.disabled = false;
+    listTipPercentage.innerText = 'Tip Percentage: 15%';
+} else {
+    tipPercent = .20;
+    tipMessage.innerText = 'Tip Percentage set to 20% (your saved tip preference)';
+    tenPercent.disabled = false;
+    fifteenPercent.disabled = false;
+    twentyPercent.disabled = true;
+    listTipPercentage.innerText = 'Tip Percentage: 20%';
+}
+
+tipPreference.addEventListener('click', () => {
+    console.log('tip default is being called');
+    if (tenPercent.disabled === true) {
+        localStorage.setItem('tipDefault', '10');
+    } else if (fifteenPercent.disabled === true) {
+        localStorage.setItem('tipDefault', '15');
+    } else {
+        localStorage.setItem('tipDefault', '20');
+    }
+});
+
 
 billInput.addEventListener('keyup', function () {
     calculate();
@@ -23,6 +64,7 @@ tenPercent.addEventListener('click', () => {
     fifteenPercent.disabled = false;
     twentyPercent.disabled = false;
     tipMessage.innerText = 'You are now tipping 10%.';
+    listTipPercentage.innerText = 'Tip Percentage: 10%';
 });
 fifteenPercent.addEventListener('click', () => {
     tipPercent = .15;
@@ -31,6 +73,7 @@ fifteenPercent.addEventListener('click', () => {
     fifteenPercent.disabled = true;
     twentyPercent.disabled = false;
     tipMessage.innerText = 'You are now tipping 15%.';
+    listTipPercentage.innerText = 'Tip Percentage: 15%';
 });
 twentyPercent.addEventListener('click', () => {
     tipPercent = .20;
@@ -39,6 +82,7 @@ twentyPercent.addEventListener('click', () => {
     fifteenPercent.disabled = false;
     twentyPercent.disabled = true;
     tipMessage.innerText = 'You are now tipping 20%.';
+    listTipPercentage.innerText = 'Tip Percentage: 20%';
 });
 
 function calculate() {
