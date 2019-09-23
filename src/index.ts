@@ -11,14 +11,16 @@ const listTipAmount = document.getElementById('listTipAmount');
 const listTotal = document.getElementById('listTotal');
 const tipMessage = document.getElementById('tipMessage');
 const tipPreference = document.getElementById('tipPreference');
+const customTipInput = document.getElementById('customTipInput') as HTMLInputElement;
+const customTipSpan = document.getElementById('customTipSpan');
 let tipPercent = .20;
 
 /* Checks local storage for a user-set default tip percentage. If found,
 disables the button for the prefered amount.*/
 /* #region tipDefault Setting From Local Storage */
 if (localStorage.getItem('tipDefault') === null) {
-    tipPercent = .10;
-    listTipPercentage.innerText = 'Tip Percentage: 10%';
+    tipPercent = .20;
+    listTipPercentage.innerText = 'Tip Percentage: 20%';
 } else if (localStorage.getItem('tipDefault') === '10') {
     tipPercent = .10;
     tipMessage.innerText = 'Tip Percentage set to 10% (your saved tip preference)';
@@ -45,7 +47,6 @@ if (localStorage.getItem('tipDefault') === null) {
 
 // anon func to store user tip preference in LocalStorage
 tipPreference.addEventListener('click', () => {
-    console.log('tip default is being called');
     if (tenPercent.disabled === true) {
         localStorage.setItem('tipDefault', '10');
     } else if (fifteenPercent.disabled === true) {
@@ -55,13 +56,32 @@ tipPreference.addEventListener('click', () => {
     }
 });
 
-// func to call caluclate when a user changes the input in bill amount box
+// listening to keyup on bill amount input and calls calculate function
 billInput.addEventListener('keyup', function () {
-    calculate();
+    listBillAmount.innerText = `Bill Cost Before Tip: $${billInput.value}`;
+    if (customTipInput.value === '') {
+        calculate();
+    }
 });
+
+/* listening to keyup on custom tip amount. Should change innerText of list tip %, hide
+the percentage choices from default tip amounts, and add the custom tip to the total bill. */
+customTipInput.addEventListener('keyup', () => {
+    tipPercent = customTipInput.valueAsNumber;
+    listTipAmount.hidden = true;
+    listTipPercentage.innerText = `Custom Tip: $${tipPercent}`;
+    const customTipGrandTotal = billInput.valueAsNumber + customTipInput.valueAsNumber;
+    listTotal.innerText = `Cost of Bill Including Tip: $${customTipGrandTotal}`;
+});
+customTipSpan.addEventListener('click', () => {
+    customTipInput.hidden = false;
+});
+
 
 // anon func to change tip percentage if user clicks button and calls calculate to update values accordingly
 tenPercent.addEventListener('click', () => {
+    listTipAmount.hidden = false;
+    customTipInput.hidden = true;
     tipPercent = .10;
     calculate();
     tenPercent.disabled = true;
@@ -71,6 +91,8 @@ tenPercent.addEventListener('click', () => {
     listTipPercentage.innerText = 'Tip Percentage: 10%';
 });
 fifteenPercent.addEventListener('click', () => {
+    listTipAmount.hidden = false;
+    customTipInput.hidden = true;
     tipPercent = .15;
     calculate();
     tenPercent.disabled = false;
@@ -80,6 +102,8 @@ fifteenPercent.addEventListener('click', () => {
     listTipPercentage.innerText = 'Tip Percentage: 15%';
 });
 twentyPercent.addEventListener('click', () => {
+    listTipAmount.hidden = false;
+    customTipInput.hidden = true;
     tipPercent = .20;
     calculate();
     tenPercent.disabled = false;

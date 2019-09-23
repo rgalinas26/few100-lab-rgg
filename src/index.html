@@ -18,7 +18,7 @@
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <span class="input-group-text"
-              id="basic-addon1">$</span>
+              id="basic-addon1">$ Bill Amount</span>
       </div>
       <input type="number"
              class="form-control"
@@ -45,8 +45,19 @@
     </div>
     <span id="tipMessage">Our app tips 20% by default because food service is tough sometimes. Change your tip amount by
       using the buttons to
-      the left
-      below.</span>
+      the left</span>
+
+    <div class="input-group mb-3"
+         id="customDiv">
+      <div class="input-group-prepend">
+        <span class="input-group-text"
+              id="customTipSpan">Custom Tip Amount</span>
+      </div>
+      <input type="number"
+             class="form-control"
+             id="customTipInput">
+    </div>
+
 
     <ul class="list-group">
       <li class="list-group-item"
@@ -57,8 +68,19 @@
           id="listTipAmount">Amount of Tip: $0.00</li>
       <li class="list-group-item"
           id="listTotal">Cost of the Bill Including Tip: $0.00</li>
+      <li class="list-group-item"
+          id="totalSplitAmount"
+          hidden='true'>Cost for each person: </li>
     </ul>
-
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text"
+              id="basic-addon1">Split the bill by X people: </span>
+      </div>
+      <input type="number"
+             class="form-control"
+             id="splitInput">
+    </div>
   </main>
 </body>
 
