@@ -16,6 +16,7 @@ const customTipSpan = document.getElementById('customTipSpan');
 const splitInput = document.getElementById('splitInput') as HTMLInputElement;
 const totalSplitAmount = document.getElementById('totalSplitAmount');
 let tipPercent = .20;
+let customTip = 0;
 
 /* Checks local storage for a user-set default tip percentage. If found,
 disables the button for the prefered amount.*/
@@ -47,6 +48,15 @@ if (localStorage.getItem('tipDefault') === null) {
 }
 /* #endregion */
 
+// listening to keyup on bill amount input and calls calculate function
+billInput.addEventListener('keyup', function () {
+    listBillAmount.innerText = `Bill Cost Before Tip: $${billInput.value}`;
+    if (customTipInput.value === '') {
+        calculate();
+    } else {
+        customTipCalculate();
+    }
+});
 // anon func to store user tip preference in LocalStorage
 tipPreference.addEventListener('click', () => {
     if (tenPercent.disabled === true) {
@@ -57,29 +67,14 @@ tipPreference.addEventListener('click', () => {
         localStorage.setItem('tipDefault', '20');
     }
 });
-
-// listening to keyup on bill amount input and calls calculate function
-billInput.addEventListener('keyup', function () {
-    listBillAmount.innerText = `Bill Cost Before Tip: $${billInput.value}`;
-    if (customTipInput.value === '') {
-        calculate();
-    }
-});
-
-/* listening to keyup on custom tip amount. Should change innerText of list tip %, hide
-the percentage choices from default tip amounts, and add the custom tip to the total bill. */
-customTipInput.addEventListener('keyup', () => {
-    tipPercent = customTipInput.valueAsNumber;
-    listTipAmount.hidden = true;
-    listTipPercentage.innerText = `Custom Tip: $${tipPercent}`;
-    const customTipGrandTotal = billInput.valueAsNumber + customTipInput.valueAsNumber;
-    listTotal.innerText = `Cost of Bill Including Tip: $${customTipGrandTotal}`;
-});
+// listening for a custom tip amount input
+customTipInput.addEventListener('keyup', customTipCalculate);
+/* called when a user enters a custom tip amount. Should either create a grand total
+ with the custom tip amount or show split the bill + custom tip amount by n people depending
+ on user input. */
 customTipSpan.addEventListener('click', () => {
     customTipInput.hidden = false;
 });
-
-
 // anon func to change tip percentage if user clicks button and calls calculate to update values accordingly
 tenPercent.addEventListener('click', () => {
     listTipAmount.hidden = false;
@@ -114,9 +109,14 @@ twentyPercent.addEventListener('click', () => {
     tipMessage.innerText = 'You are now tipping 20%.';
     listTipPercentage.innerText = 'Tip Percentage: 20%';
 });
-
+/* listening to split input box and calls calculate or custom calculate depending on w/not
+user split the bill */
 splitInput.addEventListener('keyup', () => {
-    calculate();
+    if (customTipInput.value === '') {
+        calculate();
+    } else {
+        customTipCalculate();
+    }
 });
 
 // function that calculates tip amount, displays bill amount, and calculates grand total.
@@ -129,6 +129,8 @@ function calculate() {
         listBillAmount.innerText = `Bill Cost Before Tip: $0.00`;
         listTotal.innerText = `Cost of the Bill Including Tip: $0.00`;
         billInput.classList.remove('error');
+    } else if (splitInput.valueAsNumber === 0) {
+        splitInput.classList.add('error');
     } else {
         const tip = (Math.round((billInput.valueAsNumber * tipPercent)).toFixed(2));
         const total = (parseInt(tip) + billInput.valueAsNumber).toFixed(2);
@@ -141,6 +143,22 @@ function calculate() {
             totalSplitAmount.hidden = false;
             totalSplitAmount.innerText = `Each Person Owes: $${split}`;
         }
+    }
+}
+function customTipCalculate() {
+    if (splitInput.value === '') {
+        customTip = customTipInput.valueAsNumber;
+        listTipAmount.hidden = true;
+        listTipPercentage.innerText = `Custom Tip: $${customTip}`;
+        const customTipGrandTotal = billInput.valueAsNumber + customTip;
+        listTotal.innerText = `Cost of Bill Including Tip: $${customTipGrandTotal}`;
+    } else {
+        customTip = customTipInput.valueAsNumber;
+        listTipAmount.hidden = true;
+        listTipPercentage.innerText = `Custom Tip: $${customTip}`;
+        const customTipGrandTotal = ((billInput.valueAsNumber + customTip) / splitInput.valueAsNumber)
+            .toFixed(2);
+        listTotal.innerText = `Cost For Each Person: $${customTipGrandTotal}`;
     }
 }
 
